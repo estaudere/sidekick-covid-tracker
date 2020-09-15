@@ -4,6 +4,7 @@ from datetime import date
 import pandas as pd
 import os
 
+# find elements
 driver = webdriver.Firefox()
 driver.get("https://www.coppellisd.com/COVID-19Dashboard")
 p_elements = driver.find_elements_by_tag_name('td')
@@ -32,6 +33,7 @@ inperson = []
 remote = []
 other = []
 
+# format lists
 count = 0
 for p in values:
   if count == 0:
@@ -51,6 +53,7 @@ for p in values:
     other.append(str(p))
     count = 0
 
+# add to dataframe
 df = pd.DataFrame()
 df["timestamp"] = timestamp
 df["building"] = building
@@ -63,6 +66,7 @@ df["staff"] = pd.to_numeric(df["staff"], errors='coerce')
 df["inperson"] = pd.to_numeric(df["inperson"], errors='coerce')
 df["remote"] = pd.to_numeric(df["remote"], errors='coerce')
 df["other"] = pd.to_numeric(df["other"], errors='coerce')
+
 
 print(df)
 
