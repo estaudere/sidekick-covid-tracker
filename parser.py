@@ -70,7 +70,20 @@ df["other"] = pd.to_numeric(df["other"], errors='coerce')
 
 print(df)
 
+
 # save the dataframe
 today = date.today().strftime('%d-%m-%Y')
 os.chdir('./data')
 df.to_csv(f'{today}.csv', index=False)
+
+
+# save totals
+numcols = ["staff", "inperson", "remote", "other"]
+
+totals = [today]
+for col in numcols:
+  sum = sum(df[col])
+  totals.append(sum)
+
+with open('./data/totals.csv','wb') as file:
+    file.write(totals)
