@@ -11,7 +11,7 @@ list_chars = p_element.text
 full = []
 current = ""
 for c in list_chars:
-  if c == "\\n":
+  if c == "\n":
     full.append(current)
     print(current)
     current = []
