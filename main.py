@@ -5,18 +5,21 @@ import pandas as pd
 
 driver = webdriver.Firefox()
 driver.get("https://www.coppellisd.com/COVID-19Dashboard")
-p_element = driver.find_element_by_tag_name('td')
-list_chars = p_element.text
+p_element = driver.find_element_by_tag_name('td').text
 
-full = []
-current = ""
-for c in list_chars:
-  if c == "\n":
-    full.append(current)
-    print(current)
-    current = []
-  else:
-    current += c
+print(p_element)
+
+# full = []
+# current = []
+# for c in p_element:
+#   if c == "\\n":
+#     "".join(current)
+#     full.append(current)
+#     current = []
+#   else:
+#     current.append(c)
+
+# print(full)
 
 
 timestamp = []
@@ -27,7 +30,7 @@ remote = []
 other = []
 
 count = 0
-for p in full:
+for p in p_element:
   if count == 0:
     timestamp.append(date.today())
     building.append(str(p))
