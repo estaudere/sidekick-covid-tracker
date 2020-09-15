@@ -2,6 +2,7 @@ import requests
 from selenium import webdriver
 from datetime import date
 import pandas as pd
+import os
 
 driver = webdriver.Firefox()
 driver.get("https://www.coppellisd.com/COVID-19Dashboard")
@@ -51,21 +52,21 @@ for p in values:
     count = 0
 
 df = pd.DataFrame()
-df["timestamp"] = timestamp.astype(datetime)
+df["timestamp"] = timestamp
 df["building"] = building
-df["staff"] = staff.astype(float)
-df["inperson"] = inperson.astype(float)
-df["remote"] = remote.astype(float)
-df["other"] = other.astype(float)
+df["staff"] = staff
+df["inperson"] = inperson
+df["remote"] = remote
+df["other"] = other
 
-# df["timestamp"].to_datetime()
-df["staff"].to_numeric()
-df["inperson"].to_numeric()
-df["remote"].to_numeric()
-df["other"].to_numeric()
+df["staff"] = pd.to_numeric(df["staff"], errors='coerce')
+df["inperson"] = pd.to_numeric(df["inperson"], errors='coerce')
+df["remote"] = pd.to_numeric(df["remote"], errors='coerce')
+df["other"] = pd.to_numeric(df["other"], errors='coerce')
 
 print(df)
 
 # save the dataframe
 today = date.today().strftime('%d-%m-%Y')
-df.to_csv(f'.\data\{today}.csv', index=False)
+os.chdir('./data')
+df.to_csv(f'{today}.csv', index=False)
