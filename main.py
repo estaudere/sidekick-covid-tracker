@@ -5,19 +5,21 @@ import pandas as pd
 
 driver = webdriver.Firefox()
 driver.get("https://www.coppellisd.com/COVID-19Dashboard")
-p_element = driver.find_element_by_tag_name('td').text
+p_elements = driver.find_elements_by_tag_name('td')
 
-print(p_element)
+values = [] # appending them as text
+for p in p_elements:
+  values.append(str(p.text))
 
 # full = []
 # current = []
-# for c in p_element:
-#   if c == "\\n":
+# for value in values:
+#   if value == "\\n":
 #     "".join(current)
 #     full.append(current)
 #     current = []
 #   else:
-#     current.append(c)
+#     current.append(value)
 
 # print(full)
 
@@ -30,44 +32,40 @@ remote = []
 other = []
 
 count = 0
-for p in p_element:
+for p in values:
   if count == 0:
     timestamp.append(date.today())
-    building.append(str(p))
+    building.append(p)
     count += 1
-  if count == 1:
+  elif count == 1:
     staff.append(str(p))
     count += 1
-  if count == 2:
+  elif count == 2:
     inperson.append(str(p))
     count += 1
-  if count == 3:
+  elif count == 3:
     remote.append(str(p))
     count += 1
-  if count == 4:
+  else:
     other.append(str(p))
     count = 0
 
 df = pd.DataFrame()
-df["timestamp"] = timestamp
+df["timestamp"] = timestamp.astype(datetime)
 df["building"] = building
-df["staff"] = staff
-df["inperson"] = inperson
-df["remote"] = remote
-df["other"] = other
+df["staff"] = staff.astype(float)
+df["inperson"] = inperson.astype(float)
+df["remote"] = remote.astype(float)
+df["other"] = other.astype(float)
 
-# df["timestamp"].to_numeric()
-# df["building"].to_numeric()
-# df["staff"].to_numeric()
-# df["inperson"].to_numeric()
-# df["remote"].to_numeric()
-# df["other"].to_numeric()
+# df["timestamp"].to_datetime()
+df["staff"].to_numeric()
+df["inperson"].to_numeric()
+df["remote"].to_numeric()
+df["other"].to_numeric()
 
 print(df)
 
-
-# path = '.\data\\'
-# filename = str(date.today()) + '.csv'
-# save_as = r + path + filename
-
-# df.to_csv(save_as, index = False)
+# save the dataframe
+today = date.today().strftime('%d-%m-%Y')
+df.to_csv(f'.\data\{today}.csv', index=False)
