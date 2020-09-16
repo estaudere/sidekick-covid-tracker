@@ -62,11 +62,16 @@ df["inperson"] = inperson
 df["remote"] = remote
 df["other"] = other
 
+
+numcols = ["staff", "inperson", "remote", "other"]
+
 df["staff"] = pd.to_numeric(df["staff"], errors='coerce')
 df["inperson"] = pd.to_numeric(df["inperson"], errors='coerce')
 df["remote"] = pd.to_numeric(df["remote"], errors='coerce')
 df["other"] = pd.to_numeric(df["other"], errors='coerce')
 
+df["total"] = df[numcols].sum(axis=1)
+numcols.append("total")
 
 print(df)
 
@@ -77,13 +82,15 @@ os.chdir('./data')
 df.to_csv(f'{today}.csv', index=False)
 
 
-# save totals
-numcols = ["staff", "inperson", "remote", "other"]
-
-totals = [today]
+# save column totals to totals.csv
+day_totals = [today]
 for col in numcols:
   sum = sum(df[col])
-  totals.append(sum)
+  day_totals.append(sum)
 
 with open('./data/totals.csv','wb') as file:
     file.write(totals)
+
+
+# append all content to timeseries
+df.to_csv('./data/timeseries.csv', mode='a', header=False)
