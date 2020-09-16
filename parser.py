@@ -93,4 +93,4 @@ with open('./data/totals.csv','wb') as file:
 
 
 # append all content to timeseries
-df.to_csv('./data/timeseries.csv', mode='a', header=False)
+df.to_csv('./data/timeseries.csv', mode='a', header=False, index=False)
