@@ -137,7 +137,7 @@ app.layout = html.Div(
                             [
                                 html.Div(
                                     [
-                                        html.P("Staff"),
+                                        html.P("CHS Staff"),
                                         html.H6(
                                             id="staffText",
                                             className="info_text"
@@ -151,7 +151,7 @@ app.layout = html.Div(
                                     [
                                         html.Div(
                                             [
-                                                html.P("In person"),
+                                                html.P("CHS In person"),
                                                 html.H6(
                                                     id="inpersonText",
                                                     className="info_text"
@@ -162,7 +162,7 @@ app.layout = html.Div(
                                         ),
                                         html.Div(
                                             [
-                                                html.P("Remote"),
+                                                html.P("CHS Remote"),
                                                 html.H6(
                                                     id="remoteText",
                                                     className="info_text"
@@ -173,7 +173,7 @@ app.layout = html.Div(
                                         ),
                                         html.Div(
                                             [
-                                                html.P("Other"),
+                                                html.P("CHS Other"),
                                                 html.H6(
                                                     id="otherText",
                                                     className="info_text"
@@ -385,10 +385,9 @@ def make_main_figure(building_list):
             y=dff['total'],
             hovertemplate =
             '<b><br>%{x}<br></b>'+
-            'Total cases: %{y}',
+            'Active cases: %{y}',
             line=dict(
-                shape="spline",
-                smoothing="2",
+                shape="linear",
                 color=BUILDING_COLORS[b]
             )
         )
@@ -396,7 +395,7 @@ def make_main_figure(building_list):
     
     layout = dict(
         hovermode='closest',
-        title='Total cases by CISD building',
+        title='Total active cases by CISD building',
         showlegend=False
     )
 
@@ -660,4 +659,4 @@ def make_main_figure(building_list):
 
 # Main
 if __name__ == '__main__':
-    app.server.run(debug=True, threaded=True)
+    app.server.run(debug=False, threaded=True)
