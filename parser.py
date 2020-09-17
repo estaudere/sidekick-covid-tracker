@@ -73,23 +73,24 @@ df["other"] = pd.to_numeric(df["other"], errors='coerce')
 df["total"] = df[numcols].sum(axis=1)
 numcols.append("total")
 
-print(df)
 
 
-# save the dataframe
 today = date.today().strftime('%d-%m-%Y')
-os.chdir('./data')
-df.to_csv(f'{today}.csv', index=False)
-
 
 # save column totals to totals.csv
-day_totals = [today]
+day_totals = [today, "Total"]
 for col in numcols:
   sum = sum(df[col])
   day_totals.append(sum)
 
-with open('./data/totals.csv','wb') as file:
-    file.write(totals)
+ser = pd.Series(day_totals, index = df.columns)
+df = df.append(ser, ignore_index=True)
+
+
+print(df)
+# save the dataframe
+os.chdir('./data')
+df.to_csv(f'{today}.csv', index=False)
 
 
 # append all content to timeseries
