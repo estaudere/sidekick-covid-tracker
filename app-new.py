@@ -182,15 +182,6 @@ app.layout = html.Div(
                                             id="other",
                                             className="pretty_container"
                                         ),
-                                        html.Div(
-                                            [
-                                                dcc.DatePickerSingle(
-                                                    id='my-date-picker-single',
-                                                    # date=get_date() # for testing purpose
-                                                    date=today # Actual code
-                                                )
-                                            ], style= {'display': 'none'}
-                                        )
                                     ],
                                     id="tripleContainer",
                                 )
@@ -340,66 +331,76 @@ def display_status(selector):
 
 # indicator text boxes
 @app.callback(Output('staffText', 'children'),
-               [Input('chs', 'data')])
+               [Input('chs_data', 'data')])
 def update_staff_text(data):
-    return str(data[0]) + " cases"
+    if data[0] == 1:
+        return str(data[0]) + " case"
+    else:
+        return str(data[0]) + " cases"
 
 
 @app.callback(Output('inpersonText', 'children'),
-              [Input('chs', 'data')])
+              [Input('chs_data', 'data')])
 def update_inperson_text(data):
-    return str(data[1]) + " cases"
+    if data[1] == 1:
+        return str(data[1]) + " case"
+    else:
+        return str(data[1]) + " cases"
 
 
 @app.callback(Output('remoteText', 'children'),
               [Input('chs_data', 'data')])
 def update_remote_text(data):
-    return str(data[2]) + " cases"
+    if data[2] == 1:
+        return str(data[2]) + " case"
+    else:
+        return str(data[2]) + " cases"
 
 
 @app.callback(Output('otherText', 'children'),
               [Input('chs_data', 'data')])
 def update_other_text(data):
-    return str(data[3]) + " cases"
+    if data[3] == 1:
+        return str(data[3]) + " case"
+    else:
+        return str(data[3]) + " cases"
 
 
 # Selectors -> main graph SCATTER
+print(filter_dataframe_all('Coppell High School'))
 
-@app.callback(Output('main_graph', 'figure'),
+@app.callback(Output('count_graph', 'figure'),
               [Input('building', 'value')])
-def make_main_figure(building, selector, main_graph_layout):
-
+def make_main_figure(building_list):
     traces = []
-    for building, date in cases.groupby('building'):
-        dff = filter_dataframe_all(building)
+    for b in building_list:
+        campus = BUILDINGS.get(b)
+        dff = filter_dataframe_all(campus)
+        print(campus)
         trace = dict(
             ttype='scatter',
             mode='lines',
-            name='Cases',
+            name=campus,
             x=dff['timestamp'],
             y=dff['total'],
+            hovertemplate =
+            '<b><br>%{x}<br></b>'+
+            'Total cases: %{y}',
             line=dict(
                 shape="spline",
                 smoothing="2",
-                color=BUILDING_COLORS[building]
+                color=BUILDING_COLORS[b]
             )
         )
         traces.append(trace)
+    
+    layout = dict(
+        hovermode='closest',
+        title='Total cases by CISD building',
+        showlegend=False
+    )
 
-    # if (main_graph_layout is not None and 'locked' in selector):
-
-    #     lon = float(main_graph_layout['mapbox']['center']['lon'])
-    #     lat = float(main_graph_layout['mapbox']['center']['lat'])
-    #     zoom = float(main_graph_layout['mapbox']['zoom'])
-    #     layout['mapbox']['center']['lon'] = lon
-    #     layout['mapbox']['center']['lat'] = lat
-    #     layout['mapbox']['zoom'] = zoom
-    # else:
-    #     lon = -78.05
-    #     lat = 42.54
-    #     zoom = 7
-
-    figure = dict(data=traces)
+    figure = dict(data=traces, layout=layout)
     return figure
 
 

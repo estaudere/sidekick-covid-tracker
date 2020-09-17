@@ -43,6 +43,7 @@ BUILDING_COLORS = dict(
      MSW = '#CA6BCC',
      MSN = '#DD3497',
      HSN = '#4EB3D3',
+     CHS = '#000000',
      NTH = '#FFFF33',
      VPC = '#FB9A99',
      VWA = '#A6D853',
