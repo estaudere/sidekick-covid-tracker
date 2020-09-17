@@ -10,4 +10,4 @@ resources:
     memory_gb: 1
     disk_size_gb: 10
 
-entrypoint: gunicorn -b 127.0.0.1:8080 app:server
+entrypoint: gunicorn -b 127.0.0.1:8080 web:server
