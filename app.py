@@ -659,4 +659,4 @@ def make_main_figure(building_list):
 
 # Main
 if __name__ == '__main__':
-    app.server.run(debug=False, threaded=True)
+    app.run_server(debug=True)

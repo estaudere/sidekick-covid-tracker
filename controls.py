@@ -27,7 +27,7 @@ BUILDINGS = dict(
      SVC = 'Service Center',
 )
 
-BUILDING_COLORS = dict(
+BUILDING_COLORS_OLD = dict(
      AUS = '#FFEDA0',
      CRE = '#FA9FB5',
      CCE = '#A1D99B',
@@ -50,3 +50,35 @@ BUILDING_COLORS = dict(
      BKC = '#D4B9DA',
      SVC = '#AEB0B8'
 )
+
+BUILDING_COLORS = dict(
+     AUS = '#003f5c',
+     CRE = '#2f4b7c',
+     CCE = '#665191',
+     DCE = '#a05195',
+     LSE = '#d45087',
+     RJL = '#f95d6a',
+     MKB = '#ff7c43',
+     PKT = '#ffa600',
+     TCE = '#003f5c',
+     VRE = '#2f4b7c',
+     WLE = '#665191',
+     MSE = '#a05195',
+     MSW = '#d45087',
+     MSN = '#f95d6a',
+     HSN = '#ff7c43',
+     CHS = '#ffa600',
+     NTH = '#2f4b7c',
+     VPC = '#665191',
+     VWA = '#a05195',
+     BKC = '#d45087',
+     SVC = '#f95d6a'
+)
+
+#2f4b7c
+#665191
+#a05195
+#d45087
+#f95d6a
+#ff7c43
+#ffa600
