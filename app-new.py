@@ -34,9 +34,10 @@ building_options = [{'label': str(BUILDINGS[building]), 'value': str(building)}
 
 
 # Load data
-today = date(2020, 9, 15).strftime('%d-%m-%Y') # date.today().strftime('%d-%m-%Y')
+today = str(date(2020, 9, 15).strftime('%d-%m-%Y')) # date.today().strftime('%d-%m-%Y')
 cases_today = pd.read_csv(f'./data/{today}.csv')
 cases = pd.read_csv('./data/timeseries.csv')
+
 
 
 # for mapbox??
@@ -69,7 +70,7 @@ cases = pd.read_csv('./data/timeseries.csv')
 # Create app layout
 app.layout = html.Div(
     [
-        dcc.Store(id='aggregate_data'),
+        dcc.Store(id='chs_data'),
         html.Div(
             [
                 html.Div(
@@ -138,7 +139,7 @@ app.layout = html.Div(
                                     [
                                         html.P("Staff"),
                                         html.H6(
-                                            id="staff_text",
+                                            id="staffText",
                                             className="info_text"
                                         )
                                     ],
@@ -224,19 +225,31 @@ app.layout = html.Div(
 
 
 # Helper functions
-def human_format(num):
+# def human_format(num):
 
-    # magnitude = int(math.log(num, 1000))
-    # mantissa = str(int(num / (1000**magnitude)))
-    return num
+#     # magnitude = int(math.log(num, 1000))
+#     # mantissa = str(int(num / (1000**magnitude)))
+#     return num
 
+def filter_dataframe_today(building):
+        dff = cases_today[cases_today['building'] == building]
+        return dff
 
-def filter_dataframe(df, building, date):
-    if date:
-        dff = df[(df.building == building) & (df.timestamp == date)]
-    else:
-        dff = df[(df.building == building)]
+def filter_dataframe_all(building):
+    dff = cases[cases['building'] == building]
     return dff
+
+
+def fetch_chs():
+
+    dff = filter_dataframe_today('Coppell High School')
+    staff = dff["staff"].tolist()
+    inperson = dff["inperson"].tolist()
+    remote = dff["remote"].tolist()
+    other = dff["other"].tolist()
+    total = dff["total"].tolist()
+
+    return sum(staff), sum(inperson), sum(remote), sum(other), sum(total)
 
 
 # def fetch_individual(api):
@@ -267,24 +280,14 @@ def filter_dataframe(df, building, date):
 #     return index, gas, oil, water
 
 # indicator boxes
-def fetch_chs(df, today):
 
-    dff = filter_dataframe(df, 'Coppell High School', today)
-    staff = [dff["staff"]]
-    inperson = [dff["inperson"]]
-    remote = [dff["remote"]]
-    other = [dff["other"]]
-
-    return staff, inperson, remote, other
-
-
+print(fetch_chs())
 # Create callbacks
-@app.callback(Output('aggregate_data', 'data'),
-            [Input('my-date-picker-single', 'date')])
-
-def update_production_text(today):
-    staff, inperson, remote, other, total = fetch_chs(cases, today)
-    return [human_format(sum(staff)), human_format(sum(inperson)), human_format(sum(remote))]
+@app.callback(Output('chs_data', 'data'),
+            [Input('building_selector', 'value')])
+def update_cases_text(selector):
+    staff, inperson, remote, other, total = fetch_chs()
+    return staff, inperson, remote, other, total
 
 
 # Radio -> multi
@@ -336,23 +339,28 @@ def display_status(selector):
 
 
 # indicator text boxes
-
-@app.callback(Output('gasText', 'children'),
-              [Input('aggregate_data', 'data')])
-def update_gas_text(data):
-    return data[0] + " cases"
-
-
-@app.callback(Output('oilText', 'children'),
-              [Input('aggregate_data', 'data')])
-def update_oil_text(data):
-    return data[1] + " cases"
+@app.callback(Output('staffText', 'children'),
+               [Input('chs', 'data')])
+def update_staff_text(data):
+    return str(data[0]) + " cases"
 
 
-@app.callback(Output('waterText', 'children'),
-              [Input('aggregate_data', 'data')])
-def update_water_text(data):
-    return data[2] + " cases"
+@app.callback(Output('inpersonText', 'children'),
+              [Input('chs', 'data')])
+def update_inperson_text(data):
+    return str(data[1]) + " cases"
+
+
+@app.callback(Output('remoteText', 'children'),
+              [Input('chs_data', 'data')])
+def update_remote_text(data):
+    return str(data[2]) + " cases"
+
+
+@app.callback(Output('otherText', 'children'),
+              [Input('chs_data', 'data')])
+def update_other_text(data):
+    return str(data[3]) + " cases"
 
 
 # Selectors -> main graph SCATTER
@@ -363,7 +371,7 @@ def make_main_figure(building, selector, main_graph_layout):
 
     traces = []
     for building, date in cases.groupby('building'):
-        dff = filter_dataframe(cases, building)
+        dff = filter_dataframe_all(building)
         trace = dict(
             ttype='scatter',
             mode='lines',
