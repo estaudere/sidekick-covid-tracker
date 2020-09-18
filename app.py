@@ -34,7 +34,7 @@ building_options = [{'label': str(BUILDINGS[building]), 'value': str(building)}
 
 
 # Load data
-today = str(date(2020, 9, 15).strftime('%d-%m-%Y')) # date.today().strftime('%d-%m-%Y')
+today = str(date.today().strftime('%d-%m-%Y'))
 cases_today = pd.read_csv(f'./data/{today}.csv')
 cases = pd.read_csv('./data/timeseries.csv')
 
