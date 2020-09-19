@@ -4,10 +4,12 @@ from datetime import date
 import pandas as pd
 import os
 
-# find elements
+# find elements, set selenium options
 chrome_options = webdriver.chrome.options.Options()
+chrome_options.add_argument("--headless")
 chrome_options.binary_location = GOOGLE_CHROME_BIN
 chrome_options.add_argument('--disable-gpu')
+chrome_options.add_argument('--no-sandbox')
 driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
 
 driver.get("https://www.coppellisd.com/COVID-19Dashboard")
