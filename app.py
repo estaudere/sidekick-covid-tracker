@@ -87,8 +87,8 @@ app.layout = html.Div(
                             'Coppell High School COVID-19 Tracker',
 
                         ),
-                        html.H4(
-                            'The Sidekick. Last updated 9/15.',
+                        html.H6(
+                            f'Dashboard made by Neha Desaraju, entertainment editor @ Coppell Student Media. Updated {today}',
                         )
                     ],
 
@@ -280,7 +280,6 @@ def fetch_chs():
 
 # indicator boxes
 
-print(fetch_chs())
 # Create callbacks
 @app.callback(Output('chs_data', 'data'),
             [Input('building_selector', 'value')])
@@ -375,7 +374,6 @@ def update_other_text(data):
 
 
 # Selectors -> main graph SCATTER
-print(filter_dataframe_all('Coppell High School'))
 
 @app.callback(Output('count_graph', 'figure'),
               [Input('building', 'value')])
@@ -384,7 +382,6 @@ def make_main_figure(building_list):
     for b in building_list:
         campus = BUILDINGS.get(b)
         dff = filter_dataframe_all(campus)
-        print(campus)
         trace = dict(
             ttype='scatter',
             mode='lines',
