@@ -4,6 +4,7 @@ import pickle
 import copy
 import datetime as dt
 from datetime import date
+import datetime
 import math
 
 import requests
@@ -35,6 +36,13 @@ building_options = [{'label': str(BUILDINGS[building]), 'value': str(building)}
 
 # Load data
 today = str(date.today().strftime('%d-%m-%Y'))
+if os.path.isfile(f'./data/{today}.csv'):
+    today = str(date.today().strftime('%d-%m-%Y'))
+else:
+    yesterday = date.today() - datetime.timedelta(days=1)
+    today = str(yesterday.strftime('%d-%m-%Y'))
+
+
 cases_today = pd.read_csv(f'./data/{today}.csv')
 cases = pd.read_csv('./data/timeseries.csv')
 
