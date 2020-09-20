@@ -4,6 +4,10 @@ from datetime import date
 import pandas as pd
 import os
 
+
+GOOGLE_CHROME_BIN = 'app/.apt/usr/bin/google-chrome'
+CHROME_DRIVER = '/app/.chromedriver/bin/chromedriver'
+
 # find elements, set selenium options
 chrome_options = webdriver.chrome.options.Options()
 chrome_options.add_argument("--headless")
